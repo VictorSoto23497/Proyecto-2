@@ -1,0 +1,70 @@
+#include <Servo.h>
+Servo Servomotor;
+Servo Servomotor2;
+Servo Servomotor3;
+Servo Servomotor4;
+
+const int pinpot=A0;
+const int pinpot2=A1;
+const int pinpot3=A2;
+const int pinpot4=A3;
+
+const int pinmotor=9;//Pin 9 porque tiene salida PWM
+const int pinmotor2=11;
+const int pinmotor3=6;
+const int pinmotor4=10;
+
+const int poten;
+const int poten2;
+const int poten3;
+const int poten4;
+
+const int pinint=2;
+
+bool interruptor;
+void setup() {
+Serial.begin(9600);//Iniciando el Serial para poder imprimir
+Servomotor.attach(pinmotor);
+Servomotor2.attach(pinmotor2);
+Servomotor3.attach(pinmotor3);
+Servomotor4.attach(pinmotor4);
+//Esta parte es la que une el arduino con el motor
+//Entonces de esta manera se comunica el arduino con el motor
+pinMode(pinpot, INPUT);
+pinMode(pinpot2, INPUT);
+pinMode(pinpot3, INPUT);
+pinMode(pinpot4, INPUT);
+pinMode(pinint, INPUT);
+}
+
+void loop() {
+interruptor=digitalRead(pinint);
+if(interruptor==1){
+  int poten = analogRead(pinpot);
+  int mapeo = map(poten, 0, 1023, 0, 180);
+  Servomotor.write(mapeo);
+  Serial.print("Ángulo 1: "); Serial.println(mapeo);
+  //--------------------------------------------------------------------------
+  int poten2=analogRead(pinpot2);
+  int mapeo2 = map(poten2, 0, 1023, 0, 180);
+  Servomotor2.write(mapeo2);
+  Serial.print("Ángulo 2: "); Serial.println(mapeo2);
+  //--------------------------------------------------------------------------
+  int poten3=analogRead(pinpot3);
+  int mapeo3 = map(poten3, 0, 1023, 0, 180);
+  Servomotor3.write(mapeo3);
+  Serial.print("Ángulo 3: "); Serial.println(mapeo3);
+  //--------------------------------------------------------------------------
+  int poten4=analogRead(pinpot4);
+  int mapeo4 = map(poten4, 0, 1023, 0, 180);
+  Servomotor4.write(mapeo4);
+  Serial.print("Ángulo 4: "); Serial.println(mapeo4);
+  //--------------------------------------------------------------------------
+}
+else{
+  Servomotor.write(0);
+  Servomotor2.write(0);
+  Servomotor3.write(0);
+  Servomotor4.write(0);
+}
+}
