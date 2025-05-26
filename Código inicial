@@ -1,4 +1,9 @@
 #include <Servo.h>
+
+void modoManual();
+void modoAuto();
+
+
 Servo Servomotor;
 Servo Servomotor2;
 Servo Servomotor3;
@@ -14,6 +19,12 @@ const int pinmotor2=11;
 const int pinmotor3=6;
 const int pinmotor4=10;
 
+const int botade=3;
+const int botret=4;
+
+bool adelante;
+bool atras;
+
 const int poten;
 const int poten2;
 const int poten3;
@@ -22,6 +33,8 @@ const int poten4;
 const int pinint=2;
 
 bool interruptor;
+
+int Contador;
 void setup() {
 Serial.begin(9600);//Iniciando el Serial para poder imprimir
 Servomotor.attach(pinmotor);
@@ -35,11 +48,28 @@ pinMode(pinpot2, INPUT);
 pinMode(pinpot3, INPUT);
 pinMode(pinpot4, INPUT);
 pinMode(pinint, INPUT);
+
+pinMode(botade, INPUT_PULLUP);
+pinMode(botret, INPUT_PULLUP);
+
+Contador=0;
 }
+
 
 void loop() {
 interruptor=digitalRead(pinint);
 if(interruptor==1){
+  modoManual();
+}
+else{
+  modoAuto();
+}
+}
+
+
+
+
+void modoManual() {
   int poten = analogRead(pinpot);
   int mapeo = map(poten, 0, 1023, 0, 180);
   Servomotor.write(mapeo);
@@ -61,10 +91,111 @@ if(interruptor==1){
   Serial.print("Ángulo 4: "); Serial.println(mapeo4);
   //--------------------------------------------------------------------------
 }
-else{
-  Servomotor.write(0);
-  Servomotor2.write(0);
-  Servomotor3.write(0);
-  Servomotor4.write(0);
+void modoAuto(){
+adelante=digitalRead(botade);
+atras=digitalRead(botret);
+
+
+if (digitalRead(botade)==LOW){
+delay(50);
+if (digitalRead(botade)==LOW){
+Contador++;
 }
+while(digitalRead(botade)==LOW){
+Serial.print("No hago nada ");
+}
+}
+if (digitalRead(botret)==LOW){
+delay(50);
+if (digitalRead(botret)==LOW){
+Contador--;
+}
+while(digitalRead(botret)==LOW){
+Serial.print("No hago nada ");
+}
+}
+if(Contador>5){
+Contador=0;
+}
+if(Contador<0){
+Contador=0;
+}
+Serial.print("El valor del contador es: "); Serial.println(Contador);
+switch (Contador) {
+    case 0:
+      Servomotor.write(0);
+      Servomotor2.write(0);
+      Servomotor3.write(0);
+      Servomotor4.write(0);
+      break;
+    case 1:
+      Servomotor.write(0);
+      Servomotor2.write(90);
+      Servomotor3.write(90);
+      Servomotor4.write(180);
+      break;
+     case 2:
+      Servomotor.write(45);
+      Servomotor2.write(45);
+      Servomotor3.write(135);
+      Servomotor4.write(90);
+      break;
+     case 3:
+      Servomotor.write(90);
+      Servomotor2.write(0);
+      Servomotor3.write(180);
+      Servomotor4.write(0);
+      break;
+     case 4:
+      Servomotor.write(135);
+      Servomotor2.write(135);
+      Servomotor3.write(45);
+      Servomotor4.write(90);
+      break;
+     case 5:
+      Servomotor.write(180);
+      Servomotor2.write(90);
+      Servomotor3.write(0);
+      Servomotor4.write(1800);
+      break;
+
+
+
+switch (Contador) {
+    case 0:
+      Serial.println()("Ángulo 1: 0");
+      Serial.println()("Ángulo 2: 0");
+      Serial.println()("Ángulo 3: 0");
+      Serial.println()("Ángulo 4: 0");
+      break;
+    case 1:
+      Serial.println()("Ángulo 1: 0");
+      Serial.println()("Ángulo 2: 90");
+      Serial.println()("Ángulo 3: 90");
+      Serial.println()("Ángulo 4: 180");
+      break;
+     case 2:
+      Serial.println()("Ángulo 1: 45");
+      Serial.println()("Ángulo 2: 45");
+      Serial.println()("Ángulo 3: 135");
+      Serial.println()("Ángulo 4: 90");
+      break;
+     case 3:
+      Serial.println()("Ángulo 1: 90");
+      Serial.println()("Ángulo 2: 0");
+      Serial.println()("Ángulo 3: 180");
+      Serial.println()("Ángulo 4: 0");
+      break;
+     case 4:
+      Serial.println()("Ángulo 1: 135");
+      Serial.println()("Ángulo 2: 135");
+      Serial.println()("Ángulo 3: 45");
+      Serial.println()("Ángulo 4: 90");
+      break;
+     case 5:
+      Serial.println()("Ángulo 1: 180");
+      Serial.println()("Ángulo 2: 90");
+      Serial.println()("Ángulo 3: 0");
+      Serial.println()("Ángulo 4: 180");
+      break;
 }
