@@ -37,7 +37,11 @@ bool interruptor;
 const int ledmanual=12;
 const int ledauto=7;
 
+
+
+
 int Contador;
+int acu;
 void setup() {
 Serial.begin(9600);//Iniciando el Serial para poder imprimir
 Servomotor.attach(pinmotor);
@@ -58,6 +62,7 @@ pinMode(botret, INPUT_PULLUP);
 pinMode(ledmanual, OUTPUT);
 pinMode(ledauto, OUTPUT);
 Contador=0;
+acu=1;
 }
 
 
@@ -82,23 +87,28 @@ void modoManual() {
   int poten = analogRead(pinpot);
   int mapeo = map(poten, 0, 1023, 0, 180);
   Servomotor.write(mapeo);
-  Serial.print("Ángulo 1: "); Serial.println(mapeo);
   //--------------------------------------------------------------------------
   int poten2=analogRead(pinpot2);
   int mapeo2 = map(poten2, 0, 1023, 0, 180);
   Servomotor2.write(mapeo2);
-  Serial.print("Ángulo 2: "); Serial.println(mapeo2);
   //--------------------------------------------------------------------------
   int poten3=analogRead(pinpot3);
   int mapeo3 = map(poten3, 0, 1023, 0, 180);
   Servomotor3.write(mapeo3);
-  Serial.print("Ángulo 3: "); Serial.println(mapeo3);
   //--------------------------------------------------------------------------
   int poten4=analogRead(pinpot4);
   int mapeo4 = map(poten4, 0, 1023, 0, 180);
   Servomotor4.write(mapeo4);
-  Serial.print("Ángulo 4: "); Serial.println(mapeo4);
   //--------------------------------------------------------------------------
+  if(acu==1){
+    Serial.print("Ángulo 1: "); Serial.println(mapeo);
+    Serial.print("Ángulo 2: "); Serial.println(mapeo2);
+    Serial.print("Ángulo 3: "); Serial.println(mapeo3);
+    Serial.print("Ángulo 4: "); Serial.println(mapeo4);
+    delay(300);
+  }
+
+
 }
 void modoAuto(){
 adelante=digitalRead(botade);
@@ -129,7 +139,10 @@ Contador=0;
 if(Contador<0){
 Contador=5;
 }
-Serial.print("El valor del contador es: "); Serial.println(Contador);
+//if(acu==1){
+  //Serial.print("El valor del contador es: "); Serial.println(Contador);
+  //delay(200);
+//}
 switch (Contador) {
     case 0:
       Servomotor.write(0);
@@ -171,40 +184,57 @@ switch (Contador) {
 
 switch (Contador) {
     case 0:
-      Serial.println("Ángulo 1: 0");
-      Serial.println("Ángulo 2: 0");
-      Serial.println("Ángulo 3: 0");
-      Serial.println("Ángulo 4: 0");
+      if(acu==1){
+        Serial.println("Ángulo 1: 0");
+        Serial.println("Ángulo 2: 0");
+        Serial.println("Ángulo 3: 0");
+        Serial.println("Ángulo 4: 0");
+        delay(200);
+      }
       break;
     case 1:
-      Serial.println("Ángulo 1: 0");
-      Serial.println("Ángulo 2: 90");
-      Serial.println("Ángulo 3: 90");
-      Serial.println("Ángulo 4: 180");
+      if(acu==1){
+        Serial.println("Ángulo 1: 0");
+        Serial.println("Ángulo 2: 90");
+        Serial.println("Ángulo 3: 90");
+        Serial.println("Ángulo 4: 180");
+       delay(200);
+      }
       break;
      case 2:
-      Serial.println("Ángulo 1: 45");
-      Serial.println("Ángulo 2: 45");
-      Serial.println("Ángulo 3: 135");
-      Serial.println("Ángulo 4: 90");
+      if(acu==1){
+        Serial.println("Ángulo 1: 45");
+        Serial.println("Ángulo 2: 45");
+        Serial.println("Ángulo 3: 135");
+        Serial.println("Ángulo 4: 90");
+       delay(200);
+      }
       break;
      case 3:
-      Serial.println("Ángulo 1: 90");
-      Serial.println("Ángulo 2: 0");
-      Serial.println("Ángulo 3: 180");
-      Serial.println("Ángulo 4: 0");
+     if(acu==1){
+        Serial.println("Ángulo 1: 90");
+        Serial.println("Ángulo 2: 0");
+        Serial.println("Ángulo 3: 180");
+        Serial.println("Ángulo 4: 0");
+      delay(200);
+      }
       break;
      case 4:
+     if(acu==1){
       Serial.println("Ángulo 1: 135");
       Serial.println("Ángulo 2: 135");
       Serial.println("Ángulo 3: 45");
       Serial.println("Ángulo 4: 90");
+      delay(200);
+    }
       break;
      case 5:
-      Serial.println("Ángulo 1: 180");
-      Serial.println("Ángulo 2: 90");
-      Serial.println("Ángulo 3: 0");
-      Serial.println("Ángulo 4: 180");
+      if(acu==1){
+        Serial.println("Ángulo 1: 180");
+        Serial.println("Ángulo 2: 90");
+        Serial.println("Ángulo 3: 0");
+        Serial.println("Ángulo 4: 180");
+      }
       break;
   }
 }
