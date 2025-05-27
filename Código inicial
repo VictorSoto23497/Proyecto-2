@@ -37,8 +37,10 @@ bool interruptor;
 const int ledmanual=12;
 const int ledauto=7;
 
+const int ledfiesta=5;
+const int ledfiesta2=8;
 
-
+const int pinBuzzer=A5;
 
 int Contador;
 int acu;
@@ -61,6 +63,12 @@ pinMode(botret, INPUT_PULLUP);
 
 pinMode(ledmanual, OUTPUT);
 pinMode(ledauto, OUTPUT);
+
+pinMode(ledfiesta, OUTPUT);
+pinMode(ledfiesta2, OUTPUT);
+
+pinMode(pinBuzzer, OUTPUT);
+
 Contador=0;
 acu=1;
 }
@@ -119,6 +127,7 @@ if (digitalRead(botade)==LOW){
 delay(50);
 if (digitalRead(botade)==LOW){
 Contador++;
+musica();
 }
 while(digitalRead(botade)==LOW){
 Serial.print("No hago nada ");
@@ -128,6 +137,7 @@ if (digitalRead(botret)==LOW){
 delay(50);
 if (digitalRead(botret)==LOW){
 Contador--;
+musica();
 }
 while(digitalRead(botret)==LOW){
 Serial.print("No hago nada ");
@@ -236,5 +246,31 @@ switch (Contador) {
         Serial.println("Ángulo 4: 180");
       }
       break;
+  }
+  parpadeo();
+}
+void parpadeo() {
+  digitalWrite(ledfiesta, HIGH);
+  digitalWrite(ledfiesta2, HIGH);
+  delay(150);
+  digitalWrite(ledfiesta, LOW);
+  digitalWrite(ledfiesta2, LOW);
+  delay(150);
+}
+void musica() {
+  for (int i = 0; i < 2; i++) {
+    tone(pinBuzzer, 1000); 
+    delay(200);            
+    noTone(pinBuzzer);
+    delay(150);            
+  }
+
+  delay(300); 
+
+  for (int i = 0; i < 2; i++) {
+    tone(pinBuzzer, 800);  
+    delay(200);
+    noTone(pinBuzzer);
+    delay(150);
   }
 }
