@@ -1,24 +1,24 @@
 #include <Servo.h>
-
+//Funciones
 void modoManual();
 void modoAuto();
 
-
+//La declaración de los nombres de los servo
 Servo Servomotor;
 Servo Servomotor2;
 Servo Servomotor3;
 Servo Servomotor4;
-
+//Todos los potenciometros que mueven los servos
 const int pinpot=A0;
 const int pinpot2=A1;
 const int pinpot3=A2;
 const int pinpot4=A3;
-
+//La manera en que se hace el anclaje entre motores y arduino
 const int pinmotor=9;//Pin 9 porque tiene salida PWM
 const int pinmotor2=11;
 const int pinmotor3=6;
 const int pinmotor4=10;
-
+//Botones para el modo auto para moverse adelante y atrás
 const int botade=3;
 const int botret=4;
 
@@ -29,20 +29,21 @@ const int poten;
 const int poten2;
 const int poten3;
 const int poten4;
-
+//Para el interruptor
 const int pinint=2;
 
 bool interruptor;
-
+//Para indicar en que estado se encuentra la garra
 const int ledmanual=12;
 const int ledauto=7;
-
+//Extra para hacer ambiente en el modo auto
 const int ledfiesta=5;
 const int ledfiesta2=8;
-
+//Para hacer ambiente con un buzzer
 const int pinBuzzer=A5;
-
+//Para el modo auto
 int Contador;
+//Una manera para agregar delay a la impresión que se va a utilizar
 int acu;
 void setup() {
 Serial.begin(9600);//Iniciando el Serial para poder imprimir
@@ -70,18 +71,22 @@ pinMode(ledfiesta2, OUTPUT);
 pinMode(pinBuzzer, OUTPUT);
 
 Contador=0;
+//acu lo pusimos como 1 pero puede ser cualquier valor
 acu=1;
 }
 
 
 void loop() {
+//Lecutra del interruptor para saber en que modo ponerlo 
 interruptor=digitalRead(pinint);
 if(interruptor==1){
+  //Manda a llamar la función la cual tiene todas las instruccioones 
   modoManual();
   digitalWrite(ledmanual, HIGH);
   digitalWrite(ledauto, LOW);
 }
 else{
+  //Manda a llamar la función la cual tiene todas las instruccioones 
   modoAuto();
   digitalWrite(ledmanual, LOW);
   digitalWrite(ledauto, HIGH);
@@ -94,7 +99,7 @@ else{
 void modoManual() {
   int poten = analogRead(pinpot);
   int mapeo = map(poten, 0, 1023, 0, 180);
-  Servomotor.write(mapeo);
+  Servomotor.write(mapeo);//Se escribe el ángulo ya convertido al motor
   //--------------------------------------------------------------------------
   int poten2=analogRead(pinpot2);
   int mapeo2 = map(poten2, 0, 1023, 0, 180);
@@ -109,6 +114,7 @@ void modoManual() {
   Servomotor4.write(mapeo4);
   //--------------------------------------------------------------------------
   if(acu==1){
+    //Para que se imprima cada cierto tiempo
     Serial.print("Ángulo 1: "); Serial.println(mapeo);
     Serial.print("Ángulo 2: "); Serial.println(mapeo2);
     Serial.print("Ángulo 3: "); Serial.println(mapeo3);
@@ -119,24 +125,25 @@ void modoManual() {
 
 }
 void modoAuto(){
+
 adelante=digitalRead(botade);
 atras=digitalRead(botret);
 
 
 if (digitalRead(botade)==LOW){
-delay(50);
+delay(50);//Esta en low por la lógica inversa
 if (digitalRead(botade)==LOW){
-Contador++;
-musica();
+Contador++;//Se suma al contador 
+musica();//Se manda a llamar la función música
 }
-while(digitalRead(botade)==LOW){
+while(digitalRead(botade)==LOW){//Antirebote de manera que va a salir del ciclo hasta que se cambie de estado
 Serial.print("No hago nada ");
 }
 }
 if (digitalRead(botret)==LOW){
 delay(50);
 if (digitalRead(botret)==LOW){
-Contador--;
+Contador--;//Lo mismo pero restando al contador 
 musica();
 }
 while(digitalRead(botret)==LOW){
@@ -188,7 +195,7 @@ switch (Contador) {
       Servomotor.write(180);
       Servomotor2.write(90);
       Servomotor3.write(0);
-      Servomotor4.write(1800);
+      Servomotor4.write(180);
       break;
   }
 
@@ -260,17 +267,17 @@ void parpadeo() {
 void musica() {
   for (int i = 0; i < 2; i++) {
     tone(pinBuzzer, 1000); 
-    delay(200);            
+    delay(200);           
     noTone(pinBuzzer);
-    delay(150);            
+    delay(50);            
   }
 
-  delay(300); 
+  delay(200);
 
   for (int i = 0; i < 2; i++) {
     tone(pinBuzzer, 800);  
     delay(200);
     noTone(pinBuzzer);
-    delay(150);
+    delay(50);
   }
 }
